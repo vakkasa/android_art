@@ -811,7 +811,7 @@ int Mir2Lir::GenDalvikArgsRange(CallInfo* info, int call_state,
       OpRegRegImm(kOpAdd, TargetReg(kArg3), TargetReg(kSp), start_offset);
       LIR* ld = OpVldm(TargetReg(kArg3), regs_left);
       // TUNING: loosen barrier
-      ld->def_mask = ENCODE_ALL;
+      ld->u.m.def_mask = ENCODE_ALL;
       SetMemRefType(ld, true /* is_load */, kDalvikReg);
       call_state = next_call_insn(cu_, info, call_state, target_method, vtable_idx,
                                direct_code, direct_method, type);
@@ -820,7 +820,7 @@ int Mir2Lir::GenDalvikArgsRange(CallInfo* info, int call_state,
                                direct_code, direct_method, type);
       LIR* st = OpVstm(TargetReg(kArg3), regs_left);
       SetMemRefType(st, false /* is_load */, kDalvikReg);
-      st->def_mask = ENCODE_ALL;
+      st->u.m.def_mask = ENCODE_ALL;
       call_state = next_call_insn(cu_, info, call_state, target_method, vtable_idx,
                                direct_code, direct_method, type);
     }
