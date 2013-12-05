@@ -572,11 +572,13 @@ void Thread::RunCheckpointFunction() {
 
 bool Thread::RequestCheckpoint(Closure* function) {
   CHECK(!ReadFlag(kCheckpointRequest)) << "Already have a pending checkpoint request";
+  union StateAndFlags old_state_and_flags;
+  old_state_and_flags.as_int = state_and_flags_.as_int;
   checkpoint_function_ = function;
-  union StateAndFlags old_state_and_flags = state_and_flags_;
   // We must be runnable to request a checkpoint.
   old_state_and_flags.as_struct.state = kRunnable;
-  union StateAndFlags new_state_and_flags = old_state_and_flags;
+  union StateAndFlags new_state_and_flags;
+  new_state_and_flags.as_int = old_state_and_flags.as_int;
   new_state_and_flags.as_struct.flags |= kCheckpointRequest;
   int succeeded = android_atomic_cmpxchg(old_state_and_flags.as_int, new_state_and_flags.as_int,
                                          &state_and_flags_.as_int);
