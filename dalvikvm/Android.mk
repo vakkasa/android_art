@@ -24,6 +24,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_CPP_EXTENSION := cc
 LOCAL_SRC_FILES := dalvikvm.cc
 LOCAL_CFLAGS := $(dalvikvm_cflags)
+LOCAL_NO_LTO_SUPPORT := true
 LOCAL_SHARED_LIBRARIES := libdl libnativehelper
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include external/stlport/libstlport.mk
